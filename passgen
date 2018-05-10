@@ -12,7 +12,6 @@ def sha_n_times(msg, n):
     msg = str.encode(msg)
     for _ in range(n):
         msg = hashlib.sha256(msg).digest()
-
     return msg
 
 def if_no_number_add_one(passwd):
