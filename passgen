@@ -5,7 +5,6 @@ import os
 import getpass
 
 base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-
 passwd_len = 16
 
 def sha_n_times(msg, n):
