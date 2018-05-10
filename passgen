@@ -1,0 +1,38 @@
+#!/usr/bin/python3.6
+
+import hashlib
+import os
+
+base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+
+def sha_n_times(msg, n):
+    for _ in range(n):
+        msg = hashlib.sha256(msg).digest()
+
+    return msg
+
+def bytes_to_base58(msg):
+    b58_msg = ''
+    for char in msg:
+        b58_msg += base58[char % 58]
+    return b58_msg
+
+
+os.system("clear")
+
+master_key = input("type master key in\n")
+master_hash = hashlib.sha256(str.encode(master_key)).digest()
+
+os.system("clear")
+
+while True:
+    domain = input("type in domain\n")
+    os.system("clear")
+    domain_hash = hashlib.sha256(str.encode(domain)).digest()
+    concat_hash = sha_n_times(domain_hash + master_hash, 10 ** 4)
+    concat_hash_b58 = bytes_to_base58(concat_hash)
+    print(concat_hash_b58[:16])
+
+
+	    
+   
