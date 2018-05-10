@@ -2,44 +2,59 @@
 
 import hashlib
 import os
+import getpass
 
 base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
 passwd_len = 16
 
 def sha_n_times(msg, n):
+    msg = str.encode(msg)
     for _ in range(n):
         msg = hashlib.sha256(msg).digest()
 
     return msg
 
+def if_no_number_add_one(passwd):
+    if not set(passwd) & set("123456789"):
+        passwd =  passwd[:-3] + "1" + passwd[-1:]
+    return passwd
+
+def if_no_capital_add_one(passwd):
+    if not set(passwd) & set("ABCDEFGHJKLMNPQRSTUVWXYZ"):
+        passwd =  passwd[:-4] + "A" + passwd[-2:]
+    return passwd
+
+def if_no_lower_add_one(passwd):
+    if not set(passwd) & set("abcdefghijkmnopqrstuvwxyz"):
+        passwd =  passwd[:-5] + "a" + passwd[-3:]
+    return passwd
+
 def bytes_to_base58(msg):
-    b58_msg = ''
+    b58_msg = ""
     for char in msg:
         b58_msg += base58[char % 58]
     return b58_msg
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     try:
-
         os.system("clear")
-
-        master_key = input("type master key in\n")
-        master_hash = hashlib.sha256(str.encode(master_key)).digest()
-
+        master_key = getpass.getpass(prompt="type in master key\n")
         os.system("clear")
 
         while True:
-    	    domain = input("type in domain\n")
-    	    os.system("clear")
-    	    domain_hash = hashlib.sha256(str.encode(domain)).digest()
-    	    concat_hash = sha_n_times(domain_hash + master_hash, 10 ** 5)
-    	    concat_hash_b58 = bytes_to_base58(concat_hash)
-    	    print(concat_hash_b58[:passwd_len])
+            domain = input("type in domain\n")
+            os.system("clear")
+            hash_b58 = bytes_to_base58(sha_n_times(domain + master_key, 10 ** 5))
+            passwd = hash_b58[:passwd_len]
+            passwd = if_no_number_add_one(passwd)
+            passwd = if_no_capital_add_one(passwd)
+            passwd = if_no_lower_add_one(passwd)
+            print(passwd)
 
     except KeyboardInterrupt:
-        print()
+        os.system("clear")
         print("bye bye!")
 	    
    
