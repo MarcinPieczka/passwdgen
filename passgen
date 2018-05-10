@@ -17,17 +17,17 @@ def sha_n_times(msg, n):
 
 def if_no_number_add_one(passwd):
     if not set(passwd) & set("123456789"):
-        passwd =  passwd[:-3] + "1" + passwd[-1:]
+        passwd =  passwd[:-2] + "1" + passwd[-1:]
     return passwd
 
 def if_no_capital_add_one(passwd):
     if not set(passwd) & set("ABCDEFGHJKLMNPQRSTUVWXYZ"):
-        passwd =  passwd[:-4] + "A" + passwd[-2:]
+        passwd =  passwd[:-3] + "A" + passwd[-2:]
     return passwd
 
 def if_no_lower_add_one(passwd):
     if not set(passwd) & set("abcdefghijkmnopqrstuvwxyz"):
-        passwd =  passwd[:-5] + "a" + passwd[-3:]
+        passwd =  passwd[:-4] + "a" + passwd[-3:]
     return passwd
 
 def bytes_to_base58(msg):
