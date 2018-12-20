@@ -17,19 +17,19 @@ def sha_n_times(msg, n):
 
 def if_no_number_add_one(passwd):
     if not set(passwd) & set("123456789"):
-        passwd =  passwd[:-2] + "1" + passwd[-1:]
+        passwd = passwd[:-2] + "1" + passwd[-1:]
     return passwd
 
 
 def if_no_capital_add_one(passwd):
     if not set(passwd) & set("ABCDEFGHJKLMNPQRSTUVWXYZ"):
-        passwd =  passwd[:-3] + "A" + passwd[-2:]
+        passwd = passwd[:-3] + "A" + passwd[-2:]
     return passwd
 
 
 def if_no_lower_add_one(passwd):
     if not set(passwd) & set("abcdefghijkmnopqrstuvwxyz"):
-        passwd =  passwd[:-4] + "a" + passwd[-3:]
+        passwd = passwd[:-4] + "a" + passwd[-3:]
     return passwd
 
 
@@ -41,7 +41,11 @@ def bytes_to_base58(msg):
 
 
 def clear_n_last_lines(n):
-    os.system("tput cuu1;" * (n + 1))
+    os.system(f"tput cuu {n}")
+
+
+def print_blanc(n):
+    print('\n' * n)
 
 
 def print_header():
@@ -55,30 +59,39 @@ __________  _____    _________ _________ ___________________ _______
                  \/        \/        \/        \/        \/         \/ 
         """
     )
+    print('\n'*4)
+    clear_n_last_lines(2)
+
+
+def echo(msg):
+    os.system(f'echo "{msg}"')
 
 
 def remove_header():
-    clear_n_last_lines(8)
+    clear_n_last_lines(12)
 
 
 if __name__ == "__main__":
 
+    lines_extra_to_remove = 0
+
     try:
         print_header()
         master_key = getpass.getpass(prompt="type in master key\n")
-        clear_n_last_lines(1)
+        clear_n_last_lines(5)
+        print_blanc(2)
 
         while True:
+            lines_extra_to_remove = 2
             domain = input("type in domain\n")
-            clear_n_last_lines(1)
+            clear_n_last_lines(4)
             hash_b58 = bytes_to_base58(sha_n_times(domain + master_key, 10 ** 5))
             passwd = hash_b58[:passwd_len]
             passwd = if_no_number_add_one(passwd)
             passwd = if_no_capital_add_one(passwd)
             passwd = if_no_lower_add_one(passwd)
-            print(passwd)
+            echo(f"password for {domain}: !{passwd}!\n")
 
     except KeyboardInterrupt:
-        clear_n_last_lines(1)
         remove_header()
-        print("bye bye!")
+        clear_n_last_lines(lines_extra_to_remove)
