@@ -7,26 +7,31 @@ import getpass
 base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 passwd_len = 16
 
+
 def sha_n_times(msg, n):
     msg = str.encode(msg)
     for _ in range(n):
         msg = hashlib.sha256(msg).digest()
     return msg
 
+
 def if_no_number_add_one(passwd):
     if not set(passwd) & set("123456789"):
         passwd =  passwd[:-2] + "1" + passwd[-1:]
     return passwd
+
 
 def if_no_capital_add_one(passwd):
     if not set(passwd) & set("ABCDEFGHJKLMNPQRSTUVWXYZ"):
         passwd =  passwd[:-3] + "A" + passwd[-2:]
     return passwd
 
+
 def if_no_lower_add_one(passwd):
     if not set(passwd) & set("abcdefghijkmnopqrstuvwxyz"):
         passwd =  passwd[:-4] + "a" + passwd[-3:]
     return passwd
+
 
 def bytes_to_base58(msg):
     b58_msg = ""
@@ -34,16 +39,38 @@ def bytes_to_base58(msg):
         b58_msg += base58[char % 58]
     return b58_msg
 
+
+def clear_n_last_lines(n):
+    os.system("tput cuu1;" * (n + 1))
+
+
+def print_header():
+    print(
+        r"""
+__________  _____    _________ _________ ___________________ _______   
+\______   \/  _  \  /   _____//   _____//  _____/\_   _____/ \      \  
+ |     ___/  /_\  \ \_____  \ \_____  \/   \  ___ |    __)_  /   |   \ 
+ |    |  /    |    \/        \/        \    \_\  \|        \/    |    \
+ |____|  \____|__  /_______  /_______  /\______  /_______  /\____|__  /
+                 \/        \/        \/        \/        \/         \/ 
+        """
+    )
+
+
+def remove_header():
+    clear_n_last_lines(8)
+
+
 if __name__ == "__main__":
 
     try:
-        os.system("clear")
+        print_header()
         master_key = getpass.getpass(prompt="type in master key\n")
-        os.system("clear")
+        clear_n_last_lines(1)
 
         while True:
             domain = input("type in domain\n")
-            os.system("clear")
+            clear_n_last_lines(1)
             hash_b58 = bytes_to_base58(sha_n_times(domain + master_key, 10 ** 5))
             passwd = hash_b58[:passwd_len]
             passwd = if_no_number_add_one(passwd)
@@ -52,7 +79,6 @@ if __name__ == "__main__":
             print(passwd)
 
     except KeyboardInterrupt:
-        os.system("clear")
+        clear_n_last_lines(1)
+        remove_header()
         print("bye bye!")
-	    
-   
