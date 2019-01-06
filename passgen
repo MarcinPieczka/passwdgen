@@ -73,18 +73,14 @@ def remove_header():
 
 
 if __name__ == "__main__":
-
-    lines_extra_to_remove = 0
-
     try:
         print_header()
-        master_key = getpass.getpass(prompt="type in master key\n")
-        #lines_extra_to_remove = 2
+        master_key = getpass.getpass(prompt="type in MASTER key\n")
         clear_n_last_lines(5)
         print_blanc(2)
 
         while True:
-            domain = getpass.getpass(prompt="type in domain\n")
+            domain = getpass.getpass(prompt="type in DOMAIN name\n")
             clear_n_last_lines(4)
             hash_b58 = bytes_to_base58(sha_n_times(domain + master_key, 10 ** 5))
             passwd = hash_b58[:passwd_len]
@@ -92,8 +88,8 @@ if __name__ == "__main__":
             passwd = if_no_capital_add_one(passwd)
             passwd = if_no_lower_add_one(passwd)
             bash(f"echo '!{passwd}!' | xsel -i -b")
-            echo(f"PASSWORD IS NOW IN YOUR CLIPBOARD\n")
+            passwd = None
+            echo("PASSWORD IS NOW IN YOUR CLIPBOARD\n")
 
     except (KeyboardInterrupt, EOFError):
         remove_header()
-        clear_n_last_lines(lines_extra_to_remove)
