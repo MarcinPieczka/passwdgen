@@ -1,8 +1,9 @@
-#!/usr/bin/python3.6
+#!python3
 
 import hashlib
 import os
 import getpass
+from bash import bash
 
 base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 passwd_len = 16
@@ -90,6 +91,7 @@ if __name__ == "__main__":
             passwd = if_no_number_add_one(passwd)
             passwd = if_no_capital_add_one(passwd)
             passwd = if_no_lower_add_one(passwd)
+            bash(f"echo '!{passwd}!' | xsel -i -b")
             echo(f"password for {domain}: !{passwd}!\n")
 
     except KeyboardInterrupt:
